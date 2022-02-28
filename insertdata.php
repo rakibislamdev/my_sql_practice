@@ -15,17 +15,21 @@ if (!$conn) {
     echo "connection is successful";
 }
 
+$name = "Zony";
+$email = "zony@gmail.com";
+$roll = 908390;
+
 // create table on db
-$sql = "CREATE TABLE `codedb`.`php_test2` ( `si no` INT(11) NOT NULL AUTO_INCREMENT , `name` VARCHAR(20) NOT NULL , `email` VARCHAR(20) NOT NULL , `roll` INT(11) NOT NULL , PRIMARY KEY (`si no`))";
+$sql = "INSERT INTO `codedb`.`php_test1` (`name`, `email`, `roll`) VALUES ('$name', '$email', '$roll')";
 
 // execute the sql code
 $result = mysqli_query($conn, $sql);
 
 // table connection check 
-if (!$result) {
-    die("sorry we can not create table" . mysqli_connect_error());
+if ($result) {
+    echo "The record has been inserted successfully successfully!<br>";
 } else {
-    echo "table create is successful";
+    echo "The record was not inserted successfully because of this error ---> " . mysqli_error($conn);
 }
 
 ?>
@@ -37,7 +41,7 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Table - using by php</title>
+    <title>Insert Data On Table - using by php</title>
 </head>
 
 <body>
