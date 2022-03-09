@@ -1,3 +1,50 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $pass = $_POST['password'];
+    $msg = $_POST['msg'];
+
+    //password hashing
+    $hash = password_hash($pass, PASSWORD_DEFAULT);
+
+
+    // Connecting to the Database
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "codedb";
+
+    // Create a connection
+    $conn = mysqli_connect($servername, $username, $password, $database);
+    // Die if connection was not successful
+    if (!$conn) {
+        die("Sorry we failed to connect: " . mysqli_connect_error());
+    } else {
+        $sql = "INSERT INTO `test` (`name`, `email`, `password`, `message`, `date`) VALUES ('$name', '$email', '$hash', '$msg', current_timestamp())";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Success!</strong> Your entry has been submitted successfully!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>';
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error!</strong> We are facing some technical issue and your entry ws not submitted successfully! We regret the inconvinience caused!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>';
+        }
+    }
+}
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -48,51 +95,6 @@
             </form>
         </div>
     </nav>
-    <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $msg = $_POST['msg'];
-
-
-        // Connecting to the Database
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "codedb";
-
-        // Create a connection
-        $conn = mysqli_connect($servername, $username, $password, $database);
-        // Die if connection was not successful
-        if (!$conn) {
-            die("Sorry we failed to connect: " . mysqli_connect_error());
-        } else {
-            // Submit these to a database
-            // Sql query to be executed 
-            $sql = "INSERT INTO `test` (`name`, `email`, `message`, `date`) VALUES ('$name', '$email', '$msg', current_timestamp())";
-            $result = mysqli_query($conn, $sql);
-
-            if ($result) {
-                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-          <strong>Success!</strong> Your entry has been submitted successfully!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>';
-            } else {
-                // echo "The record was not inserted successfully because of this error ---> ". mysqli_error($conn);
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong> We are facing some technical issue and your entry ws not submitted successfully! We regret the inconvinience caused!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>';
-            }
-        }
-    }
-
-
-    ?>
 
     <div class="container mt-3">
         <h1>A Simple Contact Form</h1>
@@ -106,6 +108,10 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" aria-describedby="emailHelp">
             </div>
 
             <div class="form-group">
